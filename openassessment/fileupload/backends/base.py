@@ -1,4 +1,5 @@
 import abc
+import mimetypes
 
 from django.conf import settings
 
@@ -19,6 +20,13 @@ class Settings(object):
         publicly viewable or all uploaded files will not be seen.
     """
     DEFAULT_FILE_UPLOAD_STORAGE_PREFIX = "submissions_attachments"
+    FILE_EXTENSIONS_BY_TYPE = {
+        'image/gif': '.gif',
+        'image/jpeg': '.jpg',
+        'image/pjpeg': '.jpg',
+        'image/png': '.png',
+        'application/pdf': '.pdf'
+    }
 
     @classmethod
     def get_bucket_name(cls):
@@ -34,6 +42,16 @@ class Settings(object):
         Defaults to the DEFAULT_FILE_UPLOAD_STORAGE_PREFIX class attribute.
         """
         return getattr(settings, "FILE_UPLOAD_STORAGE_PREFIX", cls.DEFAULT_FILE_UPLOAD_STORAGE_PREFIX)
+
+    @classmethod
+    def guess_extension(cls, mime_type):
+        """
+        Guess a file extension (with a leading dot) given its mime type. If no
+        file is found, return an empty extension.
+        """
+        if mime_type in cls.FILE_EXTENSIONS_BY_TYPE:
+            return cls.FILE_EXTENSIONS_BY_TYPE[mime_type]
+        return mimetypes.guess_extension(mime_type) or ''
 
 
 class BaseBackend(object):

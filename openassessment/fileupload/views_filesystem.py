@@ -112,8 +112,11 @@ def safe_save(path, content):
         raise exceptions.FileUploadInternalError(u"File upload root directory does not exist: %s" % root_directory)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    with open(path, 'w') as f:
-        f.write(content.decode('utf-8') if six.PY3 and isinstance(content, bytes) else content)
+    mode = "w"
+    if isinstance(content, bytes):
+        mode = "wb"
+    with open(path, mode) as f:
+        f.write(content)
 
 
 def safe_remove(path):

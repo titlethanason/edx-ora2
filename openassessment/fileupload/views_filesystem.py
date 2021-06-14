@@ -87,12 +87,14 @@ def save_to_file(key, content, metadata=None):
     if metadata is None:
         metadata = {}
 
+    print("FILE_PATH ===========================>"+str(file_path))
     safe_save(file_path, content)
     try:
         safe_save(metadata_path, json.dumps(metadata))
     except Exception:
         safe_remove(file_path)
         safe_remove(metadata_path)
+        print("==================== SAFE_REMOVE =================")
         raise
 
 
@@ -172,6 +174,7 @@ def get_root_directory_path():
         FileUploadInternalError if the root directory setting does not exist.
     """
     root_dir = getattr(settings, "ORA2_FILEUPLOAD_ROOT", None)
+    print("ROOT_DIR ===================> "+str(root_dir))
     if not root_dir:
         raise exceptions.FileUploadInternalError("Undefined file upload root directory setting")
     return root_dir

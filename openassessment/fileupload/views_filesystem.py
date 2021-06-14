@@ -46,9 +46,9 @@ def download_file(key):
         raise Http404()
     with open(metadata_path) as f:
         metadata = json.load(f)
-        print("METADATA_LOADED =====> " + metadata)
+        print("METADATA_LOADED =====> " + str(metadata))
         content_type = metadata.get("Content-Type", 'application/octet-stream')
-        print("CONTENT_TYPE_LOADED =====> " + content_type)
+        print("CONTENT_TYPE_LOADED =====> " + str(content_type))
     with open(file_path, 'rb') as f:
         response = HttpResponse(f.read(), content_type=content_type)
 

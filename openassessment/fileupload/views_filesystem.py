@@ -39,16 +39,23 @@ def download_file(key):
 
     file_path = get_file_path(key)
     metadata_path = get_metadata_path(key)
+    print("FILE_PATH ======> "+file_path)
+    print("METADATA_PATH ======> " + metadata_path)
+    print("OS.PATH.EXISTS ======> "+ file_path)
     if not os.path.exists(file_path):
         raise Http404()
     with open(metadata_path) as f:
         metadata = json.load(f)
+        print("METADATA_LOADED =====> " + metadata)
         content_type = metadata.get("Content-Type", 'application/octet-stream')
+        print("CONTENT_TYPE_LOADED =====> " + content_type)
     with open(file_path, 'rb') as f:
         response = HttpResponse(f.read(), content_type=content_type)
 
     file_name = os.path.basename(os.path.dirname(file_path))
+    print("FILE_NAME =====> " + file_name)
     file_extension = Settings.guess_extension(content_type)
+    print("FILE_EXTENSION =====> " + file_extension)
     if not file_name.endswith(file_extension):
         file_name += file_extension
     response['Content-Disposition'] = 'attachment; filename=' + file_name

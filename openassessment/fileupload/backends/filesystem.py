@@ -65,6 +65,7 @@ def get_cache():
         been configured.
     """
     cache_name = getattr(settings, "ORA2_FILEUPLOAD_CACHE_NAME", None)
+    print("ORA2_CACHE_NAME ================> "+ str(cache_name))
     if cache_name is None:
         raise exceptions.FileUploadInternalError("Undefined cache backend for file upload")
     return django.core.cache.caches[cache_name]
@@ -109,6 +110,11 @@ def is_download_url_available(url_key_name):
     """
     Return True if the corresponding download URL is available.
     """
+    print("URL_KEY_NAME ======================> "+ str(url_key_name))
+    print("DOWNLOAD_CACHE_KEY ==================> "+ str(get_download_cache_key(url_key_name)))
+    print("SMART_TEXT ===============> "+ str(smart_text(get_download_cache_key(url_key_name))))
+    print("GET_CACHE ==============> "+ str(get_cache()))
+    print("RETURN ==================> "+ str(get_cache().get(smart_text(get_download_cache_key(url_key_name)))))
     return get_cache().get(smart_text(get_download_cache_key(url_key_name))) is not None
 
 

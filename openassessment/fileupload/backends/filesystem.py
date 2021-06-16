@@ -8,7 +8,7 @@ from django.utils.encoding import smart_text
 
 from .. import exceptions
 from .base import BaseBackend
-
+from pathlib import Path
 
 class Backend(BaseBackend):
     """

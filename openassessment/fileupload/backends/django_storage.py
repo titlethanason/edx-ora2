@@ -27,6 +27,8 @@ class Backend(BaseBackend):
         Returns None if no file exists at that location.
         """
         path = self._get_file_path(key)
+        print("DOWNLOAD_PATH =======> " + path)
+        print("PATH_EXIST =======> " + default_storage.exists(path))
         if default_storage.exists(path):
             return default_storage.url(path)
         return None

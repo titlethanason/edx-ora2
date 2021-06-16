@@ -41,9 +41,12 @@ class Backend(BaseBackend):
         return self._get_url(key)
 
     def get_download_url(self, key):
-        print("HAHA, it uses filesystem")
-        make_download_url_available(self._get_key_name(key), self.DOWNLOAD_URL_TIMEOUT)
-        return self._get_url(key)
+        key_name = self._get_key_name(key)
+        if self._file_exists(key_name):
+            print(key_name)
+            make_download_url_available(key_name, self.DOWNLOAD_URL_TIMEOUT)
+            return self._get_url(key)
+        return None
 
     def remove_file(self, key):
         from openassessment.fileupload.views_filesystem import safe_remove, get_file_path
@@ -53,6 +56,12 @@ class Backend(BaseBackend):
         key_name = self._get_key_name(key)
         url = reverse("openassessment-filesystem-storage", kwargs={'key': key_name})
         return url
+
+    def _file_exists(self, key_name):
+        from openassessment.fileupload.views_filesystem import get_file_path
+        file_path = get_file_path(key_name)
+        file_path = Path(file_path)
+        return file_path.exists()
 
 
 def get_cache():
